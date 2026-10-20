@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Учёт заработков — личный трекер сделок: считает чистую прибыль, маржу и ROI за выбранный период. Всё хранится локально в браузере." />
+    <title>Учёт заработков</title>
+    <script>
+      // Apply theme before first paint to avoid flash
+      (function () {
+        try {
+          var raw = localStorage.getItem('profit-tracker.settings.v1');
+          var theme = raw ? JSON.parse(raw).theme : null;
+          var dark =
+            theme === 'dark' ||
+            (!theme &&
+              window.matchMedia &&
+              window.matchMedia('(prefers-color-scheme: dark)').matches);
+          if (dark) document.documentElement.classList.add('dark');
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

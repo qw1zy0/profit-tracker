@@ -1,0 +1,175 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   Profit Tracker — design tokens (from build prompt §15)
+   Colors stored as HSL channels so Tailwind's <alpha-value> works.
+   Light:  bg #F6F7F9  card #FFFFFF  text #111827  muted #6B7280  border #E5E7EB
+   Dark:   bg #0E1116  card #161B22  text #E6EDF3  border #26303B
+   Accent #4F46E5 · profit #16A34A · loss #DC2626
+   ============================================================ */
+
+:root {
+  --background: 220 16% 97%;      /* #F6F7F9 */
+  --foreground: 221 39% 11%;      /* #111827 */
+  --card: 0 0% 100%;              /* #FFFFFF */
+  --card-foreground: 221 39% 11%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 221 39% 11%;
+  --primary: 239 84% 59%;         /* #4F46E5 */
+  --primary-foreground: 0 0% 100%;
+  --secondary: 220 14% 96%;
+  --secondary-foreground: 221 39% 11%;
+  --muted: 220 16% 94%;
+  --muted-foreground: 220 9% 46%; /* #6B7280 */
+  --accent: 239 84% 59%;          /* #4F46E5 */
+  --accent-foreground: 0 0% 100%;
+  --destructive: 0 72% 51%;       /* #DC2626 */
+  --destructive-foreground: 0 0% 100%;
+  --profit: 142 71% 35%;          /* #16A34A */
+  --loss: 0 72% 51%;              /* #DC2626 */
+  --border: 220 13% 91%;          /* #E5E7EB */
+  --input: 220 13% 91%;
+  --ring: 239 84% 59%;
+  --radius: 1rem;                 /* 16px cards */
+  --shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.04), 0 8px 24px rgba(0, 0, 0, 0.04);
+}
+
+.dark {
+  --background: 215 25% 7%;       /* #0E1116 */
+  --foreground: 213 31% 91%;      /* #E6EDF3 */
+  --card: 213 18% 11%;            /* #161B22 */
+  --card-foreground: 213 31% 91%;
+  --popover: 213 18% 11%;
+  --popover-foreground: 213 31% 91%;
+  --primary: 239 84% 67%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 213 16% 16%;
+  --secondary-foreground: 213 31% 91%;
+  --muted: 213 16% 16%;
+  --muted-foreground: 213 10% 62%;
+  --accent: 239 84% 67%;
+  --accent-foreground: 0 0% 100%;
+  --destructive: 0 72% 58%;
+  --destructive-foreground: 0 0% 100%;
+  --profit: 142 65% 45%;
+  --loss: 0 72% 60%;
+  --border: 209 20% 19%;          /* #26303B */
+  --input: 209 20% 19%;
+  --ring: 239 84% 67%;
+  --shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    margin: 0;
+    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue',
+      Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold tracking-tight;
+    margin: 0;
+  }
+
+  /* All figures align in columns */
+  .tnum {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1;
+  }
+
+  button {
+    font-family: inherit;
+  }
+
+  :focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+}
+
+@layer components {
+  .card-soft {
+    @apply rounded-2xl border bg-card;
+    box-shadow: var(--shadow-soft);
+  }
+
+  .field {
+    @apply w-full rounded-xl border bg-background px-3 py-2 text-sm text-foreground
+      outline-none transition-colors;
+  }
+  .field::placeholder {
+    @apply text-muted-foreground;
+  }
+  .field:focus-visible {
+    border-color: hsl(var(--ring));
+    outline: none;
+    box-shadow: 0 0 0 3px hsl(var(--ring) / 0.25);
+  }
+
+  .btn {
+    @apply inline-flex select-none items-center justify-center gap-2 rounded-xl
+      px-4 py-2 text-sm font-medium transition-colors;
+    min-height: 44px;
+  }
+  .btn-primary {
+    @apply bg-primary text-primary-foreground hover:opacity-90;
+  }
+  .btn-ghost {
+    @apply bg-transparent text-foreground hover:bg-muted;
+  }
+  .btn-outline {
+    @apply border bg-card text-foreground hover:bg-muted;
+  }
+  .btn-danger {
+    @apply bg-transparent text-[hsl(var(--loss))] hover:bg-[hsl(var(--loss)/0.1)];
+  }
+
+  .scrollbar-thin::-webkit-scrollbar {
+    height: 6px;
+    width: 6px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-muted-foreground/30;
+  }
+}
+
+/* Modal / toast entrance — 150ms, no bouncing numbers */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes scale-in {
+  from { opacity: 0; transform: translateY(8px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes sheet-up {
+  from { opacity: 0; transform: translateY(100%); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in { animation: fade-in 150ms ease-out; }
+.animate-scale-in { animation: scale-in 150ms ease-out; }
+.animate-sheet-up { animation: sheet-up 180ms ease-out; }
+.animate-toast-in { animation: toast-in 150ms ease-out; }
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in, .animate-scale-in, .animate-sheet-up, .animate-toast-in {
+    animation: none;
+  }
+}
